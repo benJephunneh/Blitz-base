@@ -1,9 +1,13 @@
 import { z } from "zod"
 
+export const name = z.string().transform((str) => str.trim())
+
 export const email = z
   .string()
   .email()
   .transform((str) => str.toLowerCase().trim())
+
+export const role = z.string()
 
 export const password = z
   .string()
@@ -12,17 +16,19 @@ export const password = z
   .transform((str) => str.trim())
 
 export const Signup = z.object({
+  name,
   email,
   password,
+  role,
 })
 
 export const Login = z.object({
-  email,
-  password: z.string(),
+  name,
+  password,
 })
 
 export const ForgotPassword = z.object({
-  email,
+  name,
 })
 
 export const ResetPassword = z

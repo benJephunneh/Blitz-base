@@ -26,9 +26,9 @@ const UserInfo = () => {
           Logout
         </button>
         <div>
-          User id: <code>{currentUser.id}</code>
+          User: <code>{currentUser.name}</code>
           <br />
-          User role: <code>{currentUser.role}</code>
+          Role: <code>{currentUser.role}</code>
         </div>
       </>
     )
@@ -51,6 +51,7 @@ const UserInfo = () => {
 }
 
 const Home: BlitzPage = () => {
+  const branch = "change-auth"
   return (
     <div className="container">
       <main>
@@ -58,7 +59,8 @@ const Home: BlitzPage = () => {
           <Image src={logo} alt="blitzjs" />
         </div>
         <p>
-          <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
+          <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in. <br />
+          This is the <strong>{branch}</strong> branch.
         </p>
         <div className="buttons" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
           <Suspense fallback="Loading...">
@@ -71,10 +73,37 @@ const Home: BlitzPage = () => {
             run the following in your terminal:
           </strong>
         </p>
-        <pre>
-          <code>blitz generate all project name:string</code>
-        </pre>
-        <div style={{ marginBottom: "1rem" }}>(And select Yes to run prisma migrate)</div>
+        <codeblock>
+          blitz generate all customer name <br />
+          blitz generate all location primary:boolean:default=true number:int street city state
+          zipcode:int(5) block:string? lot:int? parcel:string? --parent=customer belongsTo:customer
+        </codeblock>
+        <div style={{ marginBottom: "1rem" }}>(Select No to skip running prisma migrate)</div>
+        <p>
+          Add relation in <code>schema.prisma:</code>
+        </p>
+        <codeblock>
+          model Customer (
+          <br />
+          ...
+          <br />
+          locations Location[]
+          <br />
+          )
+          <br />
+          <br />
+          model Location (
+          <br />
+          ...
+          <br />
+          customer Customer relation(fields: [customerId], references: [id])
+          <br />
+          customerId Int
+          <br />)
+        </codeblock>
+        <div style={{ marginBottom: "1rem" }}>
+          (Now run <code>blitz prisma migrate dev</code>)
+        </div>
         <div>
           <p>
             Then <strong>restart the server</strong>
@@ -146,6 +175,7 @@ const Home: BlitzPage = () => {
           -moz-osx-font-smoothing: grayscale;
           box-sizing: border-box;
         }
+
         .container {
           min-height: 100vh;
           display: flex;
@@ -239,10 +269,25 @@ const Home: BlitzPage = () => {
           padding: 0.75rem;
           text-align: center;
         }
+
         code {
           font-size: 0.9rem;
           font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
             Bitstream Vera Sans Mono, Courier New, monospace;
+        }
+        codeblock {
+          margin: 0;
+          padding: 1rem 0;
+          font-size: 0.9rem;
+          font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+            Bitstream Vera Sans Mono, Courier New, monospace;
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-itmes: center;
+          background-color: #070707;
+          color: #ffffff;
         }
 
         .grid {
