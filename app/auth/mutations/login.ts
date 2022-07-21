@@ -3,9 +3,9 @@ import db from "db"
 import { Login } from "../validations"
 import { Role } from "types"
 
-export const authenticateUser = async (rawName: string, rawPassword: string) => {
-  const { name, password } = Login.parse({ name: rawName, password: rawPassword })
-  const user = await db.user.findFirst({ where: { name } })
+export const authenticateUser = async (rawUsername: string, rawPassword: string) => {
+  const { username, password } = Login.parse({ username: rawUsername, password: rawPassword })
+  const user = await db.user.findFirst({ where: { username } })
   if (!user) throw new AuthenticationError()
 
   const result = await SecurePassword.verify(user.hashedPassword, password)
@@ -20,9 +20,9 @@ export const authenticateUser = async (rawName: string, rawPassword: string) => 
   return rest
 }
 
-export default resolver.pipe(resolver.zod(Login), async ({ name, password }, ctx) => {
+export default resolver.pipe(resolver.zod(Login), async ({ username, password }, ctx) => {
   // This throws an error if credentials are invalid
-  const user = await authenticateUser(name, password)
+  const user = await authenticateUser(username, password)
 
   await ctx.session.$create({ userId: user.id, role: user.role as Role })
 
