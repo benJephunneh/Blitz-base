@@ -1,9 +1,6 @@
 import { useMutation } from "blitz"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import signup from "app/auth/mutations/signup"
-import { Signup } from "app/auth/validations"
-import React from "react"
 import { useForm } from "react-hook-form"
 
 type SignupFormProps = {
@@ -17,7 +14,7 @@ export const SignupForm = (props: SignupFormProps) => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  // const onSubmit = (data) => console.log(data)
+  console.log(errors)
 
   const onSubmit = async (values) => {
     try {
@@ -27,34 +24,44 @@ export const SignupForm = (props: SignupFormProps) => {
       if (error.code === "P2002" && error.meta?.target?.includes("email")) {
         // This error comes from Prisma
         return { email: "This email is already being used" }
-      } else if (error.code === "P2002" && error.meta?.target?.includes("name")) {
-        return { name: "This username is already being used" }
+      } else if (error.code === "P2002" && error.meta?.target?.includes("username")) {
+        // This error comes from Prisma
+        return { email: "This username is already being used" }
       } else {
         return { [FORM_ERROR]: error.toString() }
       }
     }
   }
-  console.log(errors)
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" placeholder="Username" {...register("name", { required: true })} />
-      <input
-        type="password"
-        placeholder="Password"
-        {...register("password", { required: true, min: 10 })}
-      />
-      <input type="email" placeholder="Email" {...register("email", { required: true })} />
-      <select {...register("role", { required: true })}>
-        <option value="Owner">Owner</option>
-        <option value="Admin">Admin</option>
-        <option value="Tech">Tech</option>
-      </select>
+    <div>
+      <h1>Create an Account</h1>
 
-      <input type="submit" />
-    </form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          type="text"
+          placeholder="Username"
+          {...register("username", { required: true, maxLength: 80 })}
+        />
+        <input type="email" placeholder="email" {...register("email", { required: true })} />
+        <input
+          type="password"
+          placeholder="password"
+          {...register("password", { required: true, min: 10 })}
+        />
+        <select {...register("role", { required: true })}>
+          <option value="Owner">Owner</option>
+          <option value="Admin">Admin</option>
+          <option value="Tech">Tech</option>
+        </select>
+
+        <input type="submit" />
+      </Form>
+    </div>
   )
 }
+
+export default SignupForm
 
 /*
 export const SignupForm = (props: SignupFormProps) => {
