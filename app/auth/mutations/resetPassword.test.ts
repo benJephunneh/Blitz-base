@@ -2,7 +2,6 @@ import resetPassword from "./resetPassword"
 import db from "db"
 import { hash256, SecurePassword } from "blitz"
 import { z } from "zod"
-import { username } from "../validations"
 
 beforeEach(async () => {
   await db.$reset()
@@ -66,7 +65,7 @@ describe("resetPassword mutation", () => {
       resetPassword(
         {
           token: expiredToken,
-          username: username,
+          username: user.username,
           password: newPassword,
           passwordConfirmation: newPassword,
         },
@@ -78,7 +77,7 @@ describe("resetPassword mutation", () => {
     await resetPassword(
       {
         token: goodToken,
-        username: username,
+        username: user.username,
         password: newPassword,
         passwordConfirmation: newPassword,
       },
