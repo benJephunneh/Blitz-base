@@ -96,5 +96,3 @@ export const SignupForm = (props: SignupFormProps) => {
   )
 }
 */
-
-export default SignupForm

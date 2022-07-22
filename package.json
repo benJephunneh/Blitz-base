@@ -30,6 +30,7 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-hook-form": "7.x",
+    "react-syntax-highlighter": "15.5.0",
     "zod": "3.x"
   },
   "devDependencies": {

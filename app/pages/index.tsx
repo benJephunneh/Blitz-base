@@ -4,6 +4,8 @@ import Layout from "app/core/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
+import { Light as SyntaxHighlighter } from "react-syntax-highlighter"
+import { github } from "react-syntax-highlighter/dist/cjs/styles/hljs"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -73,34 +75,59 @@ const Home: BlitzPage = () => {
             run the following in your terminal:
           </strong>
         </p>
-        <codeblock>
-          blitz generate all customer name <br />
-          blitz generate all location primary:boolean:default=true number:int street city state
-          zipcode:int(5) block:string? lot:int? parcel:string? --parent=customer belongsTo:customer
-        </codeblock>
+        <div>
+          <SyntaxHighlighter
+            language="bash"
+            style={github}
+            className="rounded-lg border text-md sm:text-lg border-gray-100"
+            customStyle={{
+              padding: "1em",
+            }}
+          >
+            {`
+blitz generate all customer \\
+  name
+
+blitz generate all location \\
+  primary:boolean:default=true \\
+  number:int \\
+  street \\
+  city \\
+  state \\
+  zipcode:int(5) \\
+  block:string? \\
+  lot:int? \\
+  parcel:string? \\
+  --parent=customer \\
+  belongsTo:customer
+            `.trim()}
+          </SyntaxHighlighter>
+        </div>
         <div style={{ marginBottom: "1rem" }}>(Select No to skip running prisma migrate)</div>
         <p>
           Add relation in <code>schema.prisma:</code>
         </p>
-        <codeblock>
-          model Customer (
-          <br />
-          ...
-          <br />
-          locations Location[]
-          <br />
-          )
-          <br />
-          <br />
-          model Location (
-          <br />
-          ...
-          <br />
-          customer Customer relation(fields: [customerId], references: [id])
-          <br />
-          customerId Int
-          <br />)
-        </codeblock>
+        <SyntaxHighlighter
+          language="bash"
+          style={github}
+          className="rounded-lg border text-md sm:text-lg border-gray-100"
+          customStyle={{
+            padding: "1em",
+          }}
+        >
+          {`
+model Customer (
+  ...
+  locations Location[]
+)
+
+model Location (
+  ...
+  customer Customer relation(fields: [customerId], references: [id])
+  customerId Int
+)
+`.trim()}
+        </SyntaxHighlighter>
         <div style={{ marginBottom: "1rem" }}>
           (Now run <code>blitz prisma migrate dev</code>)
         </div>
@@ -109,15 +136,17 @@ const Home: BlitzPage = () => {
             Then <strong>restart the server</strong>
           </p>
           <pre>
-            <code>Ctrl + c</code>
-          </pre>
-          <pre>
             <code>blitz dev</code>
           </pre>
           <p>
             and go to{" "}
-            <Link href="/projects">
-              <a>/projects</a>
+            <Link href="/customers">
+              <a>/customers</a>
+            </Link>
+            <br />
+            or{" "}
+            <Link href="/locations">
+              <a>/customers/locations</a>
             </Link>
           </p>
         </div>
@@ -267,7 +296,7 @@ const Home: BlitzPage = () => {
           background: #fafafa;
           border-radius: 5px;
           padding: 0.75rem;
-          text-align: center;
+          text-align: left;
         }
 
         code {
