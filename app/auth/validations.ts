@@ -33,6 +33,7 @@ export const ForgotPassword = z.object({
 
 export const ResetPassword = z
   .object({
+    username: username,
     password: password,
     passwordConfirmation: password,
     token: z.string(),
