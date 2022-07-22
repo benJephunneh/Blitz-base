@@ -1,6 +1,8 @@
 import resetPassword from "./resetPassword"
 import db from "db"
 import { hash256, SecurePassword } from "blitz"
+import { z } from "zod"
+import { username } from "../validations"
 
 beforeEach(async () => {
   await db.$reset()
@@ -53,20 +55,33 @@ describe("resetPassword mutation", () => {
 
     // Non-existent token
     await expect(
-      resetPassword({ token: "no-token", password: "", passwordConfirmation: "" }, mockCtx)
+      resetPassword(
+        { token: "no-token", username: "", password: "", passwordConfirmation: "" },
+        mockCtx
+      )
     ).rejects.toThrowError()
 
     // Expired token
     await expect(
       resetPassword(
-        { token: expiredToken, password: newPassword, passwordConfirmation: newPassword },
+        {
+          token: expiredToken,
+          username: username,
+          password: newPassword,
+          passwordConfirmation: newPassword,
+        },
         mockCtx
       )
     ).rejects.toThrowError()
 
     // Good token
     await resetPassword(
-      { token: goodToken, password: newPassword, passwordConfirmation: newPassword },
+      {
+        token: goodToken,
+        username: username,
+        password: newPassword,
+        passwordConfirmation: newPassword,
+      },
       mockCtx
     )
 
