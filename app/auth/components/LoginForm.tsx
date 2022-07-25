@@ -39,7 +39,7 @@ export const LoginForm = (props: LoginFormProps) => {
       <h1>Login</h1>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" placeholder="Username" {...register("name", { required: true })} />
+        <input type="text" placeholder="Username" {...register("username", { required: true })} />
         <input
           type="password"
           placeholder="Password"
